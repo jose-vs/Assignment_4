@@ -5,10 +5,23 @@
  */
 package AssociationFinder;
 
+import Main.Actor;
+import Main.SocialNetwork;
+import java.util.HashMap;
+
 /**
  *
  * @author jcvsa
  */
-public class AssociationFinder {
+public class AssociationFinder extends SocialNetwork {
+
+    public AssociationFinder() {
+        super();
+    }
+
+    public AssociationFinder(HashMap<String, Actor> nodes) {
+        super(nodes);
+    }
+    
     
 }
