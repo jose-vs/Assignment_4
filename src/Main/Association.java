@@ -10,30 +10,30 @@ package Main;
  * @author jcvsa
  */
 public class Association {
-    private String fromNode;
-    private String toNode;
+    private String fromActor;
+    private String toActor;
     private double weight;
 
-    public Association(String fromNode, String toNode, double weight) {
-        this.fromNode = fromNode;
-        this.toNode = toNode;
+    public Association(String fromActor, String toActor, double weight) {
+        this.fromActor = fromActor;
+        this.toActor = toActor;
         setWeight(weight);
     }
 
-    public String getFromNode() {
-        return fromNode;
+    public String getFromActor() {
+        return fromActor;
     }
 
-    public void setFromNode(String fromNode) {
-        this.fromNode = fromNode;
+    public void setFromActor(String fromActor) {
+        this.fromActor = fromActor;
     }
 
-    public String getToNode() {
-        return toNode;
+    public String getToActor() {
+        return toActor;
     }
 
-    public void setToNode(String toNode) {
-        this.toNode = toNode;
+    public void setToActor(String toActor) {
+        this.toActor = toActor;
     }
 
     public double getWeight() {
@@ -46,16 +46,16 @@ public class Association {
 
     @Override
     public Association clone() {
-        return new Association(fromNode, toNode, weight);
+        return new Association(fromActor, toActor, weight);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("(");
-        sb.append(fromNode);
+        sb.append(fromActor);
         sb.append(",");
-        sb.append(toNode);
+        sb.append(toActor);
         sb.append("){");
         sb.append(weight);
         sb.append("}");
@@ -71,7 +71,7 @@ public class Association {
     }
 
     public boolean hasSameEndpoints(Association association2) {
-        if (fromNode.equals(association2.getFromNode()) && toNode.equals(association2.getToNode()))
+        if (fromActor.equals(association2.getFromActor()) && toActor.equals(association2.getToActor()))
             return true;
 
         return false;

@@ -5,18 +5,27 @@
  */
 package Main;
 
+import AssociationFinder.AssociationFinder;
+import AssociationFinder.Path;
+import CliqueFinder.CliqueFinder;
+
 /**
  *
  * @author jcvsa
  */
 public class Main {
 
-    public static void main(String[] args) {
-        SocialNetwork graph = new SocialNetwork(); 
+    public static void main(String[] args) throws Exception {
+        SocialNetwork graph = new SocialNetwork();
         initNetwork(graph);
+
         System.out.println(graph.toString());
         
+        Path path = AssociationFinder.findBestAssociation(graph, "bill", "carl");
+        System.out.println(path);
         
+        CliqueFinder.findMaximalClique(graph);
+
     }
 
     public static void initNetwork(SocialNetwork graph) {

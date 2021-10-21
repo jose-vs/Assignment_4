@@ -14,17 +14,36 @@ import java.util.Set;
  *
  * @author jcvsa
  */
-public class Actor {
-    protected String name;
-    protected HashMap<String,Double> neighbors; // adjacency list, with HashMap for each edge weight
+public class Actor implements Comparable<Actor> {
+
+    private String name;
+    private double weight = Double.MAX_VALUE;
+    private int depth;
+    private HashMap<String, Double> neighbors; // adjacency list, with HashMap for each edge weight
 
     public Actor() {
         neighbors = new HashMap();
     }
 
+    public Actor(double weight) {
+        this();
+        this.weight = weight;
+    }
+
     public Actor(String name) {
         this.name = name;
+        this.weight = 0.0;
         neighbors = new HashMap();
+    }
+
+    public Actor(String name, double weight) {
+        this(name);
+        this.weight = weight;
+    }
+    
+    public Actor(String name, double weight, int depth) { 
+        this(name, weight); 
+        this.depth = depth; 
     }
 
     public String getName() {
@@ -35,6 +54,38 @@ public class Actor {
         this.name = name;
     }
 
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public int getDepth() {
+        return depth;
+    }
+
+    public void setDepth(int depth) {
+        this.depth = depth;
+    }
+
+    public void setParent(String parent) {
+        neighbors = new HashMap<>();
+        neighbors.put(parent, 0.0);
+    }
+
+    public String getParent() {
+        Set<String> neighborLabels = neighbors.keySet();
+        if (neighborLabels.size() > 1) {
+            return null;
+        }
+        if (neighborLabels.size() < 1) {
+            return null;
+        }
+        return neighbors.keySet().iterator().next();
+    }
+
     public HashMap<String, Double> getNeighbors() {
         return neighbors;
     }
@@ -43,15 +94,15 @@ public class Actor {
         this.neighbors = neighbors;
     }
 
-    public void addEdge(String toNodeName,Double weight) {
-        neighbors.put(toNodeName, weight);
+    public void addEdge(String toActorName, Double weight) {
+        neighbors.put(toActorName, weight);
     }
 
-    public double removeEdge(String toNodeName) {
-        if (neighbors.containsKey(toNodeName)) {
-            double weight = neighbors.get(toNodeName);
-            neighbors.remove(toNodeName);
-            return weight;
+    public double removeEdge(String toActorName) {
+        if (neighbors.containsKey(toActorName)) {
+            double currWeight = neighbors.get(toActorName);
+            neighbors.remove(toActorName);
+            return currWeight;
         }
 
         return Double.MAX_VALUE;
@@ -63,32 +114,55 @@ public class Actor {
 
     public LinkedList<Association> getEdges() {
         LinkedList<Association> edges = new LinkedList<Association>();
-        for (String toNodeName : neighbors.keySet()) {
-            edges.add(new Association(name,toNodeName,neighbors.get(toNodeName)));
+        for (String toActorName : neighbors.keySet()) {
+            edges.add(new Association(name, toActorName, neighbors.get(toActorName)));
         }
 
         return edges;
     }
-    
+
     @Override
     public String toString() {
-        StringBuilder nodeStringB = new StringBuilder();
-        nodeStringB.append(name);
-        nodeStringB.append(": {");
+        StringBuilder actorStringB = new StringBuilder();
+        actorStringB.append(name);
+        actorStringB.append(": {");
         Set<String> adjacencyList = this.getAdjacencyList();
         Iterator<String> alIt = adjacencyList.iterator();
         HashMap<String, Double> neighbors = this.getNeighbors();
         while (alIt.hasNext()) {
             String neighborName = alIt.next();
-            nodeStringB.append(neighborName.toString());
-            nodeStringB.append(": ");
-            nodeStringB.append(neighbors.get(neighborName));
-            if (alIt.hasNext())
-                nodeStringB.append(", ");
+            actorStringB.append(neighborName.toString());
+            actorStringB.append(": ");
+            actorStringB.append(neighbors.get(neighborName));
+            if (alIt.hasNext()) {
+                actorStringB.append(", ");
+            }
         }
-        nodeStringB.append("}");
-        nodeStringB.append("\n");
+        actorStringB.append("}");
+        actorStringB.append("\n");
 
-        return nodeStringB.toString();
+        return actorStringB.toString();
+    }
+
+    /**
+     * 
+     * @param comparedNode
+     * @return 
+     */
+    @Override
+    public int compareTo(Actor comparedNode) {
+        double distance1 = Math.log(this.weight);
+        double distance2 = Math.log(comparedNode.getWeight());
+        if (distance1 == distance2) {
+            return 0;
+        }
+        if (distance1 > distance2) {
+            return 1;
+        }
+        return -1;
+    }
+
+    public boolean equals(Actor comparedNode) {
+        return this.getName().equals(comparedNode.getName());
     }
 }

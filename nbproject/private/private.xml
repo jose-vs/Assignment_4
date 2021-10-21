@@ -4,8 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/jcvsa/Desktop/Uni/ADA/Assignment4/src/AssociationFinder/AssociationFinder.java</file>
-            <file>file:/C:/Users/jcvsa/Desktop/Uni/ADA/Assignment4/src/CliqueFinder/CliqueFinder.java</file>
-            <file>file:/C:/Users/jcvsa/Desktop/Uni/ADA/Assignment4/src/CommunityClusterFinder/CommunityClusterFinder.java</file>
+            <file>file:/C:/Users/jcvsa/Desktop/Uni/ADA/Assignment4/src/Main/Association.java</file>
+            <file>file:/C:/Users/jcvsa/Desktop/Uni/ADA/Assignment4/src/Main/Actor.java</file>
+            <file>file:/C:/Users/jcvsa/Desktop/Uni/ADA/Assignment4/src/Main/SocialNetwork.java</file>
+            <file>file:/C:/Users/jcvsa/Desktop/Uni/ADA/Assignment4/src/Main/Main.java</file>
         </group>
     </open-files>
 </project-private>
