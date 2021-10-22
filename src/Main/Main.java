@@ -27,7 +27,8 @@ public class Main {
         System.out.println(AssociationFinder.findBestAssociation(graph, "bill", "carl"));
         System.out.println(AssociationFinder.findBestAssociation(graph, "dave", "bill"));
         
-        CliqueFinder.findMaximalClique(graph);
+        System.out.println("--- MAXIMAL CLIQUE ---");
+        System.out.println(CliqueFinder.findLargestClique(graph));
 
     }
 
