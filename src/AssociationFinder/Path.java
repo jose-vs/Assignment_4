@@ -79,12 +79,21 @@ public class Path {
 
     public void addFirst(Association edge) {
         edges.addFirst(edge);
-        totalWeight += edge.getWeight();
+        if (totalWeight > 0.0) {
+            totalWeight *= edge.getWeight();
+        } else { 
+            totalWeight = edge.getWeight();
+        }
+        
     }
 
     public void add(Association edge) {
         edges.add(edge);
-        totalWeight += edge.getWeight();
+        if (totalWeight > 0.0) {
+            totalWeight *= edge.getWeight();
+        } else { 
+            totalWeight = edge.getWeight();
+        }
     }
 
     public void addLastActor(String actorName) {

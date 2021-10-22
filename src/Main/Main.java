@@ -21,8 +21,11 @@ public class Main {
 
         System.out.println(graph.toString());
         
-        Path path = AssociationFinder.findBestAssociation(graph, "bill", "carl");
-        System.out.println(path);
+        System.out.println("--- BEST ASSOCIATION FINDER ---");
+        System.out.println(AssociationFinder.findBestAssociation(graph, "anna", "emma"));
+        System.out.println(AssociationFinder.findBestAssociation(graph, "fred", "carl"));
+        System.out.println(AssociationFinder.findBestAssociation(graph, "bill", "carl"));
+        System.out.println(AssociationFinder.findBestAssociation(graph, "dave", "bill"));
         
         CliqueFinder.findMaximalClique(graph);
 

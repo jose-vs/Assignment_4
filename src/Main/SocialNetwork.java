@@ -43,7 +43,7 @@ public class SocialNetwork {
     }
 
     public void addEdge(String name1, String name2, Double weight) {
-        if (weight <= 1 && weight >= 0) {
+        if (weight <= 1.0 && weight >= 0.0) {
             if (!socialNetwork.containsKey(name1)) {
                 addActor(name1);
             }
