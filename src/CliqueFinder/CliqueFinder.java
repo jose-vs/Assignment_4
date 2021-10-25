@@ -109,6 +109,5 @@ public class CliqueFinder {
             remainingNodes.remove(actor);
             skipNodes.add(actor);
         }
-
     }
 }

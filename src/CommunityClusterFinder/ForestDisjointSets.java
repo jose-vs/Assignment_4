@@ -4,7 +4,12 @@ package CommunityClusterFinder;
  * A class that implements a disjoint set collection using a tree for each set,
  * where each node has a link to the parent node in the tree and the
  * representative is at the root
- *
+ * 
+ * Reference
+ * -------------------------------------------------------------------------------------------
+ * Ensor, A. (2021). COMP611 Algorithm Design and Analysis: Disjoint Sets [Course Manual].  
+ *       Chapter 5.4, 106 - 108. Blackboard. https://blackboard.aut.ac.nz/
+ * 
  * @author Andrew Ensor
  */
 import java.util.ArrayList;
@@ -21,23 +26,25 @@ public class ForestDisjointSets<E> implements DisjointSetsADT<E> {
     private Map<E, Node<E>> elementMap; // map of elements to locators
 
     public ForestDisjointSets() {
-        repNodes = new ArrayList<Node<E>>();
-        setRanks = new HashMap<Node<E>, Integer>();
-        elementMap = new HashMap<E, Node<E>>();
+        repNodes = new ArrayList<>();
+        setRanks = new HashMap<>();
+        elementMap = new HashMap<>();
     }
 
+    @Override
     public E makeSet(E x) {
         if(elementMap.containsKey(x)) {
             throw new IllegalArgumentException("element already used");
         }
-        Node<E> node = new Node<E>(x);
+        Node<E> node = new Node<>(x);
         node.parentNode = node; // parent of the new node is itself  
         repNodes.add(node); // add the root of the new tree to the list
-        setRanks.put(node, new Integer(0)); // initial rank is zero
+        setRanks.put(node, 0); // initial rank is zero
         elementMap.put(x, node); // add the new element to the map
         return x;
     }
 
+    @Override
     public E union(E x, E y) {
         Node<E> nodeX = elementMap.get(x);
         Node<E> nodeY = elementMap.get(y);
@@ -53,10 +60,9 @@ public class ForestDisjointSets<E> implements DisjointSetsADT<E> {
         Node<E> repY = getRootNode(nodeY);
         if(repX == repY) {
             return repX.x; // same set
-        } else // add set with smaller rank to larger set for efficiency
-        {
-            int rankX = setRanks.get(repX).intValue();
-            int rankY = setRanks.get(repY).intValue();
+        } else { // add set with smaller rank to larger set for efficiency        
+            int rankX = setRanks.get(repX);
+            int rankY = setRanks.get(repY);
             if(rankX < rankY) {
                 return link(repY, repX); // add set with x to set with y
             } else {
@@ -78,22 +84,22 @@ public class ForestDisjointSets<E> implements DisjointSetsADT<E> {
     private E link(Node<E> repX, Node<E> repY) {  // add the tree rooted at repY as a child of tree rooted at repX
         repY.parentNode = repX;
         // update the map of set ranks and list of repNodes
-        int rankX = setRanks.get(repX).intValue();
-        int rankY = setRanks.get(repY).intValue();
+        int rankX = setRanks.get(repX);
+        int rankY = setRanks.get(repY);
         if(rankX == rankY) {
-            setRanks.put(repX, new Integer(++rankX));//add 1 to setX rank
+            setRanks.put(repX, ++rankX);//add 1 to setX rank
         }
         setRanks.remove(repY);
         repNodes.remove(repY); // setY no longer exists
         return repX.x;
     }
 
+    @Override
     public E findSet(E x) {
         Node<E> node = elementMap.get(x);
         if(node == null) {
             return null; // element not in any set
-        } else // element is in a set
-        {
+        } else { // element is in a set
             return pathCompress(node).x; // return representative of set
         }
     }
@@ -110,19 +116,20 @@ public class ForestDisjointSets<E> implements DisjointSetsADT<E> {
         return rootNode;
     }
 
+    @Override
     public String toString() {
         String output = "Sets: ";
         // determine each set
-        Map<Node<E>, List<E>> setsMap = new HashMap<Node<E>, List<E>>();
+        Map<Node<E>, List<E>> setsMap = new HashMap<>();
         // create a list to hold each set
-        for(Node<E> repNode : repNodes) {
-            setsMap.put(repNode, new ArrayList<E>());
-        }
+        repNodes.forEach((Node<E> repNode) -> {
+            setsMap.put(repNode, new ArrayList<>());
+        });
         Set<Map.Entry<E, Node<E>>> entries = elementMap.entrySet();
-        for(Map.Entry<E, Node<E>> entry : entries) {
+        entries.forEach(entry -> {
             List<E> set = setsMap.get(getRootNode(entry.getValue()));
             set.add(entry.getKey());
-        }
+        });
         for(Node<E> repNode : repNodes) {
             List<E> set = setsMap.get(repNode);
             output += "{";

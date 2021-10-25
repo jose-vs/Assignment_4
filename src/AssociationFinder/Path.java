@@ -14,7 +14,6 @@ import java.util.List;
  * @author jcvsa
  */
 public class Path {
-
     private LinkedList<Association> edges;
     private double totalWeight;
 
@@ -50,7 +49,7 @@ public class Path {
     }
 
     public List<String> getActors() {
-        LinkedList<String> actors = new LinkedList<String>();
+        LinkedList<String> actors = new LinkedList<>();
 
         for (Association edge : edges) {
             actors.add(edge.getFromActor());
@@ -121,5 +120,4 @@ public class Path {
         sb.append("]");
         return sb.toString();
     }
-
 }

@@ -3,6 +3,11 @@ package CommunityClusterFinder;
 /**
  * An interface that defines the abstract data type for a disjoint set
  * collection whose sets hold elements with type E
+ *
+ * Reference
+ * -------------------------------------------------------------------------------------------
+ * Ensor, A. (2021). COMP611 Algorithm Design and Analysis: Disjoint Sets [Course Materials].  
+ *       Chapter 5, DisjointSetsADT.java. Blackboard. https://blackboard.aut.ac.nz/
  */
 public interface DisjointSetsADT<E> {
 

@@ -44,7 +44,7 @@ public class ShortestPathTree {
     }
 
     public void setParentOf(String name, String parent) {
-        if (!actors.containsKey(name)) {
+        if(!actors.containsKey(name)) {
             actors.put(name, new Actor(name));
         }
 
@@ -53,7 +53,7 @@ public class ShortestPathTree {
     }
 
     public String getParentOf(String node) {
-        if (actors.containsKey(node)) {
+        if(actors.containsKey(node)) {
             return actors.get(node).getParent();
         } else {
             return null;

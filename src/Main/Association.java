@@ -64,16 +64,10 @@ public class Association {
     }
 
     public boolean equals(Association association2) {
-        if (hasSameEndpoints(association2) && weight == association2.getWeight())
-            return true;
-
-        return false;
+        return hasSameEndpoints(association2) && weight == association2.getWeight();
     }
 
     public boolean hasSameEndpoints(Association association2) {
-        if (fromActor.equals(association2.getFromActor()) && toActor.equals(association2.getToActor()))
-            return true;
-
-        return false;
+        return fromActor.equals(association2.getFromActor()) && toActor.equals(association2.getToActor());
     }
 }
