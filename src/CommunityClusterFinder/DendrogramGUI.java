@@ -7,14 +7,17 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.Random;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -38,6 +41,7 @@ public class DendrogramGUI extends JFrame {
 
     public DendrogramPaintPanel drawPanel;
     public CommunityClusterFinder clusterFinder;
+    public CommunityClusterFinder clusterFinder2;
     public boolean g2dToggler;
 
     public DendrogramGUI() {
@@ -51,27 +55,70 @@ public class DendrogramGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 800);
         g2dToggler = false;
-
+        
+        
         JPanel panel = new JPanel(new BorderLayout());
         drawPanel = new DendrogramPaintPanel();
         panel.add(drawPanel, BorderLayout.CENTER);
         
+        JPanel controlPanel = new JPanel(new GridLayout(1, 5));
+        
+        JCheckBox checkbox = new JCheckBox("Enable Debug"); 
+        checkbox.setSelected(true);
+        checkbox.addActionListener((action) -> {
+            if(checkbox.isSelected()) {
+                CommunityClusterFinder.DEBUG_MODE = true;
+                CommunityFloydWarshall.DEBUG_MODE = true;
+            } else {
+                CommunityClusterFinder.DEBUG_MODE = false;
+                CommunityFloydWarshall.DEBUG_MODE = false;
+            }
+        });
+        controlPanel.add(checkbox);
+        
+        initTestData();
+        initTestData2();
+        drawPanel.setRoot(clusterFinder.rootNode);
+        
+        JRadioButton radioButton1 = new JRadioButton();
+        radioButton1.setText("Test Case 1");
+        radioButton1.setSelected(false);
+        
+        JRadioButton radioButton2 = new JRadioButton();
+        radioButton2.setText("Test Case 2");
+        radioButton2.setSelected(false);
+        
+        radioButton2.addActionListener((action) -> {
+            if(radioButton2.isSelected()) {
+                drawPanel.setRoot(clusterFinder2.rootNode);
+                radioButton1.setSelected(false);
+                drawPanel.repaint();
+            }
+        });
+        radioButton1.addActionListener((action) -> {
+            if(radioButton1.isSelected()) {
+                drawPanel.setRoot(clusterFinder.rootNode);
+                radioButton2.setSelected(false);
+                drawPanel.repaint();
+            }
+        });
+        controlPanel.add(radioButton1);
+        controlPanel.add(radioButton2);
+
         JButton fontBtn = new JButton("Switch Fonts");
         fontBtn.setPreferredSize(new Dimension(50, 40));
         fontBtn.addActionListener((ActionEvent action) -> {
             g2dToggler = !g2dToggler; 
             drawPanel.repaint();
         });
-        panel.add(fontBtn, BorderLayout.NORTH);
+        controlPanel.add(fontBtn);
         
         JButton colourBtn = new JButton("Randomise Link Colours");
         colourBtn.setPreferredSize(new Dimension(50, 40));
         colourBtn.addActionListener((ActionEvent action) -> drawPanel.repaint());
-        panel.add(colourBtn, BorderLayout.SOUTH);
+        controlPanel.add(colourBtn);
         
-        initTestData();
-        drawPanel.setRoot(clusterFinder.rootNode);
-        
+        panel.add(controlPanel, BorderLayout.SOUTH);
         getContentPane().add(panel);
     }
 
@@ -101,6 +148,21 @@ public class DendrogramGUI extends JFrame {
         String[] actors = {"Anna", "Bill", "Carl", "Dave", "Emma", "Fred"};
         this.clusterFinder = new CommunityClusterFinder(associations, actors);
     }
+    
+    public void initTestData2() {
+        // Test data.
+        double[][] associations2 = {
+            {0D, 0.5D, 0.4D, 0D, 0D, 0D, 0D},
+            {0.5D, 0D, 0D, 0.4D, 0D, 0D, 0D},
+            {0.4D, 0D, 0D, 0.3D, 0.5D, 0D, 0D},
+            {0D, 0.4D, 0.3D, 0D, 0.8D, 0.3D, 0.8D},
+            {0D, 0D, 0.5D, 0.8D, 0D, 0.7D,0.3D},
+            {0D, 0D, 0D, 0.3D, 0.7D, 0D, 0.5D},
+            {0D, 0D, 0D, 0.8D, 0.3D, 0.5D, 0D}};
+        // Social actors involved in the table.
+        String[] actors2 = {"Anna", "Bill", "Carl", "Dave", "Emma", "Fred", "Frank"};
+        this.clusterFinder2 = new CommunityClusterFinder(associations2, actors2);
+    }    
 
     private class DendrogramPaintPanel extends JPanel {
         private DendroNode<String> root;
