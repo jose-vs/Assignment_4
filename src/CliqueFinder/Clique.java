@@ -12,7 +12,8 @@ import java.util.Set;
 
 /**
  *
- * @author jcvsa
+ * @author Amos Foong <18044418>
+ * @author Jose Santos <17993442>
  */
 public class Clique {
 

@@ -16,7 +16,8 @@ import java.util.PriorityQueue;
  * https://www.maxburstein.com/blog/introduction-to-graph-theory-finding-shortest-path/
  * https://www.softwaretestinghelp.com/dijkstras-algorithm-in-java/
  *
- * @author jcvsa
+ * @author Amos Foong <18044418>
+ * @author Jose Santos <17993442>
  */
 public class AssociationFinder {
 

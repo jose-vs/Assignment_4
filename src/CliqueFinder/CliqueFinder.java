@@ -19,7 +19,8 @@ import java.util.Set;
  * https://iq.opengenus.org/greedy-approach-to-find-single-maximal-clique/
  * https://iq.opengenus.org/bron-kerbosch-algorithm/
  *
- * @author jcvsa
+ * @author Amos Foong <18044418>
+ * @author Jose Santos <17993442>
  */
 public class CliqueFinder {
 
