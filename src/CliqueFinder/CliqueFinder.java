@@ -24,24 +24,19 @@ import java.util.Set;
 public class CliqueFinder {
 
     /**
-     * 
+     *
      * @param socialNetwork
-     * @return 
+     * @return
      */
     public static Clique findLargestClique(SocialNetwork socialNetwork) {
 
         HashMap<String, Actor> network = socialNetwork.getSocialNetwork();
-        /**
-         * 
-         */
+
         List<Clique> cliques = new ArrayList<>();
         Set<Actor> R = new HashSet<>();
         Set<Actor> X = new HashSet<>();
         Set<Actor> P = new HashSet<>(network.values());
 
-        /**
-         * 
-         */
         bronKerbosch(cliques, R, P, X);
 
         /**
@@ -62,52 +57,36 @@ public class CliqueFinder {
 
     /**
      *
-     * @param cliques
-     * @param potentialClique
-     * @param remainingNodes
-     * @param skipNodes
+     * @param cliques  list of maximal cliques
+     * @param R potential clique nodes
+     * @param P remaining nodes
+     * @param X skip nodes
      */
-    public static void bronKerbosch(List<Clique> cliques, Set<Actor> potentialClique, Set<Actor> remainingNodes, Set<Actor> skipNodes) {
+    public static void bronKerbosch(List<Clique> cliques, Set<Actor> R, Set<Actor> P, Set<Actor> X) {
 
-        /**
-         * 
-         */
-        if (remainingNodes.isEmpty() && skipNodes.isEmpty()) {
-            cliques.add(new Clique(potentialClique));
+        
+        if (P.isEmpty() && X.isEmpty()) {
+            cliques.add(new Clique(R));
         }
 
-        Set<Actor> rnCopy = new HashSet<>(remainingNodes);
+        Set<Actor> pCopy = new HashSet<>(P);
 
-        /**
-         * 
-         */
-        for (Actor actor : rnCopy) {
+        
+        for (Actor actor : pCopy) {
             Set<String> adjacencyList = actor.getAdjacencyList();
-            
-            /**
-             * 
-             */
-            Set<Actor> pcm = new HashSet<>(potentialClique);
-            Set<Actor> rnm = new HashSet<>(remainingNodes);
-            Set<Actor> snm = new HashSet<>(skipNodes);
 
-            /**
-             * 
-             */
-            pcm.add(actor);
-            rnm.removeIf(curr -> (!adjacencyList.contains(curr.getName())));
-            snm.removeIf(curr -> (!adjacencyList.contains(curr.getName())));
+            Set<Actor> Rnew = new HashSet<>(R);
+            Set<Actor> Pnew = new HashSet<>(P);
+            Set<Actor> Xnew = new HashSet<>(X);
 
-            /**
-             * 
-             */
-            bronKerbosch(cliques, pcm, rnm, snm);
+            Rnew.add(actor);
+            Pnew.removeIf(curr -> (!adjacencyList.contains(curr.getName())));
+            Xnew.removeIf(curr -> (!adjacencyList.contains(curr.getName())));
 
-            /**
-             * 
-             */
-            remainingNodes.remove(actor);
-            skipNodes.add(actor);
+            bronKerbosch(cliques, Rnew, Pnew, Xnew);
+
+            Pnew.remove(actor);
+            Xnew.add(actor);
         }
 
     }

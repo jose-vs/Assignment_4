@@ -15,42 +15,44 @@ import java.util.Set;
  * @author jcvsa
  */
 public class Clique {
-    private Set<Actor> clique; 
-    
-    public Clique (){ 
+
+    private Set<Actor> clique;
+
+    public Clique() {
         clique = new HashSet<>();
     }
-    
-    public Clique(Set<Actor> clique) { 
-        this.clique = clique; 
+
+    public Clique(Set<Actor> clique) {
+        this.clique = clique;
     }
-    
-    public int size() { 
-        return clique.size(); 
+
+    public int size() {
+        return clique.size();
     }
-    
-    public Set<Actor> getClique() { 
-        return  clique; 
+
+    public Set<Actor> getClique() {
+        return clique;
     }
-    
-    public void setClique(Set<Actor> clique) { 
-        this.clique = clique; 
+
+    public void setClique(Set<Actor> clique) {
+        this.clique = clique;
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
-    public String toString(){ 
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("[");
-        
+
         for (Iterator<Actor> it = clique.iterator(); it.hasNext();) {
             Actor curr = it.next();
             sb.append(curr.getName());
-            if(it.hasNext())
-                sb.append("-"); 
+            if (it.hasNext()) {
+                sb.append("-");
+            }
         }
         sb.append("]");
         return sb.toString();

@@ -18,14 +18,15 @@ import java.util.Set;
 public class SocialNetwork {
 
     private HashMap<String, Actor> socialNetwork;
-    private String root;
+    private String root; // used for storing the src actor
+
 
     public SocialNetwork() {
         socialNetwork = new HashMap<>();
     }
-
+    
     public SocialNetwork(String root) {
-        this();
+        this.socialNetwork = new HashMap<>();
         this.root = root;
     }
 
@@ -129,6 +130,27 @@ public class SocialNetwork {
 
     public void clear() {
         socialNetwork = new HashMap<>();
+    }
+    
+    public String getRoot() {
+        return root;
+    }
+    
+    public void setParentOf(String name, String parent) {
+        if (!socialNetwork.containsKey(name)) {
+            socialNetwork.put(name, new Actor(name));
+        }
+
+        socialNetwork.get(name).setParent(parent);
+
+    }
+
+    public String getParentOf(String name) {
+        if (socialNetwork.containsKey(name)) {
+            return socialNetwork.get(name).getParent();
+        } else {
+            return null;
+        }
     }
 
     @Override

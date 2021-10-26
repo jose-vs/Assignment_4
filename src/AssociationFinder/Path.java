@@ -50,7 +50,7 @@ public class Path {
     }
 
     public List<String> getActors() {
-        LinkedList<String> actors = new LinkedList<String>();
+        LinkedList<String> actors = new LinkedList<>();
 
         for (Association edge : edges) {
             actors.add(edge.getFromActor());
@@ -105,6 +105,7 @@ public class Path {
         return edges.size();
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         int numEdges = edges.size();

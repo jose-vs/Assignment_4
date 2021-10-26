@@ -17,8 +17,7 @@ import java.util.Set;
 public class Actor implements Comparable<Actor> {
 
     private String name;
-    private double weight = Double.MAX_VALUE;
-    private int depth;
+    private double weight;
     private HashMap<String, Double> neighbors; // adjacency list, with HashMap for each edge weight
 
     public Actor() {
@@ -40,11 +39,6 @@ public class Actor implements Comparable<Actor> {
         this(name);
         this.weight = weight;
     }
-    
-    public Actor(String name, double weight, int depth) { 
-        this(name, weight); 
-        this.depth = depth; 
-    }
 
     public String getName() {
         return name;
@@ -62,14 +56,6 @@ public class Actor implements Comparable<Actor> {
         this.weight = weight;
     }
 
-    public int getDepth() {
-        return depth;
-    }
-
-    public void setDepth(int depth) {
-        this.depth = depth;
-    }
-
     public void setParent(String parent) {
         neighbors = new HashMap<>();
         neighbors.put(parent, 0.0);
@@ -77,15 +63,20 @@ public class Actor implements Comparable<Actor> {
 
     public String getParent() {
         Set<String> neighborLabels = neighbors.keySet();
-        if (neighborLabels.size() > 1) {
-            return null;
+
+        if (neighborLabels.size() == 1) {
+            return neighborLabels.iterator().next();
         }
-        if (neighborLabels.size() < 1) {
-            return null;
-        }
-        return neighbors.keySet().iterator().next();
+
+        return null;
     }
 
+    /**
+     * returns a collection of an actors neighbors which includes their name and
+     * association value
+     *
+     * @return
+     */
     public HashMap<String, Double> getNeighbors() {
         return neighbors;
     }
@@ -108,10 +99,20 @@ public class Actor implements Comparable<Actor> {
         return Double.MAX_VALUE;
     }
 
+    /**
+     * returns a set of actors associated with the current actor
+     *
+     * @return
+     */
     public Set<String> getAdjacencyList() {
         return neighbors.keySet();
     }
 
+    /**
+     * returns a list of associations
+     *
+     * @return
+     */
     public LinkedList<Association> getEdges() {
         LinkedList<Association> edges = new LinkedList<Association>();
         for (String toActorName : neighbors.keySet()) {
@@ -145,9 +146,9 @@ public class Actor implements Comparable<Actor> {
     }
 
     /**
-     * 
+     *
      * @param comparedNode
-     * @return 
+     * @return
      */
     @Override
     public int compareTo(Actor comparedNode) {
