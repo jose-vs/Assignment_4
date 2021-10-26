@@ -21,7 +21,7 @@ package CommunityClusterFinder;
  */
 public class CommunityFloydWarshall {
     
-    public static boolean DEBUG_MODE = false;
+    public static boolean DEBUG_MODE = true;
     public static final double INFINITY = Double.MAX_VALUE;
     public static final int NO_VERTEX = -1;
     

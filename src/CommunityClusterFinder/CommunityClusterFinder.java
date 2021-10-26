@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class CommunityClusterFinder {
     
-    public static boolean DEBUG_MODE = false;
+    public static boolean DEBUG_MODE = true;
     
     public CommunityFloydWarshall socialNetworkGraph; // Data structure that stores the social network graph.
     public DendroNode<String> rootNode;
