@@ -19,13 +19,13 @@ public class Main {
         initNetwork(graph);
 
         System.out.println(graph.toString());
-        
+
         System.out.println("--- BEST ASSOCIATION FINDER ---");
-        System.out.println(AssociationFinder.findBestAssociation(graph, "anna", "emma"));
-        System.out.println(AssociationFinder.findBestAssociation(graph, "fred", "carl"));
-        System.out.println(AssociationFinder.findBestAssociation(graph, "bill", "carl"));
-        System.out.println(AssociationFinder.findBestAssociation(graph, "dave", "bill"));
-        
+        System.out.println("Fred to Carl = " + AssociationFinder.findBestAssociation(graph, "fred", "carl"));
+        System.out.println("Bill to Carl = " + AssociationFinder.findBestAssociation(graph, "bill", "carl"));
+        System.out.println("Dave to Bill = " + AssociationFinder.findBestAssociation(graph, "dave", "bill"));
+        System.out.println("Frank to Carl = " + AssociationFinder.findBestAssociation(graph, "frank", "carl"));
+
         System.out.println("--- MAXIMAL CLIQUE ---");
         System.out.println(CliqueFinder.findLargestClique(graph));
         
@@ -48,11 +48,21 @@ public class Main {
         graph.addEdge("emma", "dave", 0.8);
         graph.addEdge("emma", "fred", 0.7);
         graph.addEdge("emma", "carl", 0.5);
+        graph.addEdge("emma", "frank", 0.3);
 
         graph.addEdge("dave", "emma", 0.8);
         graph.addEdge("dave", "carl", 0.3);
         graph.addEdge("dave", "bill", 0.4);
+        graph.addEdge("dave", "frank", 0.8);
+        graph.addEdge("dave", "fred", 0.3);
 
         graph.addEdge("fred", "emma", 0.7);
+        graph.addEdge("fred", "frank", 0.5);
+        graph.addEdge("fred", "dave", 0.3);
+
+        graph.addEdge("frank", "dave", 0.8);
+        graph.addEdge("frank", "fred", 0.5);
+        graph.addEdge("frank", "emma", 0.3);
+
     }
 }
