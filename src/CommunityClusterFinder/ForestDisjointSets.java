@@ -3,14 +3,16 @@ package CommunityClusterFinder;
 /**
  * A class that implements a disjoint set collection using a tree for each set,
  * where each node has a link to the parent node in the tree and the
- * representative is at the root
+ * representative is at the root.
  * 
  * Reference
  * -------------------------------------------------------------------------------------------
  * Ensor, A. (2021). COMP611 Algorithm Design and Analysis: Disjoint Sets [Course Manual].  
  *       Chapter 5.4, 106 - 108. Blackboard. https://blackboard.aut.ac.nz/
  * 
- * @author Andrew Ensor
+ * @author Dr. Andrew Ensor
+ * @author Amos Foong <18044418>: Made some minute modifications to suit an application.
+ * @author Jose Santos <17993442>
  */
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,11 +25,13 @@ public class ForestDisjointSets<E> implements DisjointSetsADT<E> {
 
     private List<Node<E>> repNodes; // root for each tree in forest
     private Map<Node<E>, Integer> setRanks; //each repNode gives set rank
+    private Map<Node<E>, Double> setProximity; //each repNode has set's proximity/coverage/perimeter
     private Map<E, Node<E>> elementMap; // map of elements to locators
 
     public ForestDisjointSets() {
         repNodes = new ArrayList<>();
         setRanks = new HashMap<>();
+        setProximity = new HashMap<>();
         elementMap = new HashMap<>();
     }
 
@@ -115,6 +119,37 @@ public class ForestDisjointSets<E> implements DisjointSetsADT<E> {
         node.parentNode = rootNode;
         return rootNode;
     }
+    
+    /**
+     * Helper method to return the proximity of the set.
+     * 
+     * @param x : Name of the actor to search for.
+     * @return The max width association weight between
+     *           one actor and the others who are 
+     *           in the same set.
+     */
+    public double getProximity(E x) {
+        if(elementMap.containsKey(x) && setProximity.containsKey(elementMap.get(x))) {
+            return setProximity.get(elementMap.get(x));
+        }
+        return 0D;
+    }
+    
+    /**
+     * Helper method to set the current widest proximity of all points
+     * in the cluster. This is also known as complete linkage clustering.
+     * 
+     * @param x : Newly added node
+     * @param proximity : max distance between all points of the same cluster.
+     * @return T/F if setting proximity is successful.
+     */
+    public boolean setProximity(E x, double proximity) {
+        if(elementMap.containsKey(x)) {
+            setProximity.put(elementMap.get(x), proximity);
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public String toString() {
@@ -140,7 +175,8 @@ public class ForestDisjointSets<E> implements DisjointSetsADT<E> {
                     output += ",";
                 }
             }
-            output += "}(rank=" + setRanks.get(repNode) + ") ";
+            output += "}(proximity=" + String.format("%.3f", setProximity.get(repNode))  // Output the proximity value.
+                    + ")(rank=" + setRanks.get(repNode) + ") ";
         }
         return output + "\n";
     }
