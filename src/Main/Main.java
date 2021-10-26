@@ -28,6 +28,9 @@ public class Main {
 
         System.out.println("--- MAXIMAL CLIQUE ---");
         System.out.println(CliqueFinder.findLargestClique(graph));
+        
+        System.out.println("--- COMMUNITY CLUSTER FINDER ---");
+        System.out.println("Please see DendrogramGUI.java");
 
     }
 

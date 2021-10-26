@@ -88,6 +88,5 @@ public class CliqueFinder {
             Pnew.remove(actor);
             Xnew.add(actor);
         }
-
     }
 }

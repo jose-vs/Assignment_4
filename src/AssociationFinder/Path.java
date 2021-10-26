@@ -14,7 +14,6 @@ import java.util.List;
  * @author jcvsa
  */
 public class Path {
-
     private LinkedList<Association> edges;
     private double totalWeight;
 
@@ -122,5 +121,4 @@ public class Path {
         sb.append("]");
         return sb.toString();
     }
-
 }
