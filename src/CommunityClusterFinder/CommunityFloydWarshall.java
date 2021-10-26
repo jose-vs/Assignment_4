@@ -35,23 +35,29 @@ public class CommunityFloydWarshall {
         n = associations.length;
         this.actors = actors;
 
-        System.out.println("Original Associations:");
-        System.out.println(stringifyTable(associations, actors));
+        if(DEBUG_MODE) {
+            System.out.println("Original Associations:");
+            System.out.println(stringifyTable(associations, actors));            
+        }
 
         // Initialise d[0] with computed weights of associations.
         d = new double[n + 1][][];
         d[0] = computeWeights(associations);
 
-        System.out.println("Initial Weights:");
-        System.out.println(stringifyTable(getInitialWeightTable(), actors));
-
+        if(DEBUG_MODE) {
+            System.out.println("Initial Weights:");
+            System.out.println(stringifyTable(getInitialWeightTable(), actors));           
+        }
+        
         // create p[0]
         initPredecessorT0();
 
         // Find all pairs shortest path between people.
         performFloydWarshall();
         
-        System.out.println(this.toString());
+        if(DEBUG_MODE) {
+            System.out.println(this.toString());
+        }
     }
 
     public double[][] getShortestPathsTable() {

@@ -7,12 +7,14 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.Random;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -38,6 +40,7 @@ public class DendrogramGUI extends JFrame {
 
     public DendrogramPaintPanel drawPanel;
     public CommunityClusterFinder clusterFinder;
+    public CommunityClusterFinder clusterFinder2;
     public boolean g2dToggler;
 
     public DendrogramGUI() {
@@ -51,13 +54,27 @@ public class DendrogramGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 800);
         g2dToggler = false;
+        
+        initTestData();
+        initTestData2();
 
         JPanel panel = new JPanel(new BorderLayout());
         drawPanel = new DendrogramPaintPanel();
         panel.add(drawPanel, BorderLayout.CENTER);
         
+        JPanel controlPanel = new JPanel(new GridLayout(1, 6));
+        
+        JCheckBox checkbox = new JCheckBox(); 
+        checkbox.setText("Enable Debug");
+        checkbox.setSelected(true);
+        checkbox.addActionListener((action) -> {
+            if(checkbox.isSelected()) {
+                
+            }
+        });
+
         JButton fontBtn = new JButton("Switch Fonts");
-        fontBtn.setPreferredSize(new Dimension(50, 40));
+//        fontBtn.setPreferredSize(new Dimension(50, 40));
         fontBtn.addActionListener((ActionEvent action) -> {
             g2dToggler = !g2dToggler; 
             drawPanel.repaint();
@@ -65,7 +82,7 @@ public class DendrogramGUI extends JFrame {
         panel.add(fontBtn, BorderLayout.NORTH);
         
         JButton colourBtn = new JButton("Randomise Link Colours");
-        colourBtn.setPreferredSize(new Dimension(50, 40));
+//        colourBtn.setPreferredSize(new Dimension(50, 40));
         colourBtn.addActionListener((ActionEvent action) -> drawPanel.repaint());
         panel.add(colourBtn, BorderLayout.SOUTH);
         

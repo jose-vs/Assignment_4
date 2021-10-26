@@ -80,8 +80,11 @@ public class CommunityClusterFinder {
             int indX = (int) currentMin[i][1];
             int indY = (int) currentMin[i][2];
             
-            outputBorder();
-            System.out.printf("Current Strongest Weight: %.3f with clusters [%d: %s]-[%d: %s]\n", currentMin[i][0], indX, clusterReps.get(indX), indY, clusterReps.get(indY));
+            if(DEBUG_MODE) {
+                outputBorder();
+                System.out.printf("Current Strongest Weight: %.3f with clusters [%d: %s]-[%d: %s]\n", 
+                        currentMin[i][0], indX, clusterReps.get(indX), indY, clusterReps.get(indY));  
+            }
            
             // Construct dendrogram.
             baseNodes.set(indX, new DendroNode<>(new DendroNode<>(baseNodes.get(indX)), new DendroNode<>(baseNodes.get(indY))));
@@ -93,17 +96,21 @@ public class CommunityClusterFinder {
             clusters.setProximity(rep, currentMin[i][0]);
             System.out.println(clusters);
             
-            // Output the proximity table before merging.
-            System.out.printf("Before Merge #%d:\n", i);
-            System.out.println(stringifyList2D(proximityMatrix, clusterReps));
+            if(DEBUG_MODE) {
+                // Output the proximity table before merging.
+                System.out.printf("Before Merge #%d:\n", i);
+                System.out.println(stringifyList2D(proximityMatrix, clusterReps));                
+            }
 
             // Perform proximity recalculation and remove merged clusters 
             // from the proximity matrix.
             completeLinkage(proximityMatrix, clusterReps, indX, indY);
 
-            // Output the proximity table after merging.
-            System.out.printf("After Merge #%d:\n", i);
-            System.out.println(stringifyList2D(proximityMatrix, clusterReps));
+            if(DEBUG_MODE) {
+                // Output the proximity table after merging.
+                System.out.printf("After Merge #%d:\n", i);
+                System.out.println(stringifyList2D(proximityMatrix, clusterReps));
+            }
         }
         
         return clusters;
