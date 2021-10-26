@@ -6,8 +6,12 @@ package CommunityClusterFinder;
  *
  * Reference
  * -------------------------------------------------------------------------------------------
- * Ensor, A. (2021). COMP611 Algorithm Design and Analysis: Disjoint Sets [Course Materials].  
- *       Chapter 5, DisjointSetsADT.java. Blackboard. https://blackboard.aut.ac.nz/
+ * Ensor, A.(2021). COMP611 Algorithm Design and Analysis: Disjoint Sets [Course Materials].  
+       Chapter 5, DisjointSetsADT.java. Blackboard. https://blackboard.aut.ac.nz/
+ * 
+ * @author Amos Foong <18044418>
+ * @author Jose Santos <17993442>
+ * @param <E>
  */
 public interface DisjointSetsADT<E> {
 
@@ -24,6 +28,7 @@ public interface DisjointSetsADT<E> {
      * Forms the union of the sets which currently contain the elements x and y
      *
      * @param x, y Elements in each set to union (merge) together
+     * @param y
      * @return A representative of the set
      */
     public E union(E x, E y);

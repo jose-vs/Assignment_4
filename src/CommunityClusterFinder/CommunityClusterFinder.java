@@ -5,8 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Class that uses agglomerative hierarchical clustering technique alongside
+ * complete linkage clustering to merge the social communities together.
+ * It also constructs DendroNdoes so that the graph/community can be visually
+ * represented later. 
+ * 
  * References
  * ---------------------------------------------------------------------------------------
+ * Bhatia, A. (2017, May 16). Hierarchical Agglomerative Clustering [HAC - Complete Link]
+ *      [Video]. YouTube. https://www.youtube.com/watch?v=Cy3ci0Vqs3Y
+ * 
  * Ensor, A. (2021). COMP611 Algorithm Design and Analysis: Disjoint Sets [Course Manual].  
  *       Chapter 5.4, 106 - 108. Blackboard. https://blackboard.aut.ac.nz/
  * 
@@ -19,6 +27,7 @@ public class CommunityClusterFinder {
     
     public CommunityFloydWarshall socialNetworkGraph; // Data structure that stores the social network graph.
     public DendroNode<String> rootNode;
+    public ForestDisjointSets<String> clusters; // ForestDisjointSet to merge clusters together.
     
     private int n;
     private String[] actors; // Names of social actors in the community.
@@ -34,18 +43,27 @@ public class CommunityClusterFinder {
         // Transform table into a 2D list.
         proximityMatrix = toList2D(socialNetworkGraph.getShortestPathsTable());
         
+        // Initilise clusters.
+        clusters = new ForestDisjointSets<>();
+        
         // Agglomerate hierarchical clusters using the complete linkage  
         // clustering technique. 
-        //produce Agglomerative Hierarchical Clusters using Complete Linkage Clustering.
         agglomerateHClusters(proximityMatrix);        
     }
     
-    
-    public void agglomerateHClusters(ArrayList<ArrayList<Double>> proximityMatrix) {
-        ForestDisjointSets<String> clusters = new ForestDisjointSets<>();
+    /**
+     * Method to form a dendrogram using agglomerative hierarchical clustering with
+     * complete linkage. Uses forest disjoint set to manage the agglomeration of 
+     * communities together so that operations are efficient. 
+     * 
+     * @param proximityMatrix 
+     * @return an agglomerated cluster.
+     */
+    public ForestDisjointSets<String> agglomerateHClusters(ArrayList<ArrayList<Double>> proximityMatrix) {
+//        ForestDisjointSets<String> clusters = new ForestDisjointSets<>();
         List<String> clusterReps = new ArrayList<>();
         List<DendroNode<String>> baseNodes = new ArrayList<>();
-        List<DendroNode<String>> mergeNodes = new ArrayList<>();
+        
         // Create singleton sets for all social actors.
         for(int i = 0; i < this.n; i++) {
             clusterReps.add(clusters.makeSet(this.actors[i]));
@@ -56,36 +74,58 @@ public class CommunityClusterFinder {
         
         double[][] currentMin = new double[nMerge][3];
 
+        // For loop to keep merging until there is only one big cluster left.
         for(int i = 0; i < nMerge; i++) {
             currentMin[i] = findClosestStats(proximityMatrix);
             int indX = (int) currentMin[i][1];
             int indY = (int) currentMin[i][2];
             
-            System.out.printf("Current Strongest Association: %.3f with clusters [%d: %s]-[%d: %s]\n", currentMin[i][0], indX, clusterReps.get(indX), indY, clusterReps.get(indY));
-            
-            
-            mergeNodes.add(new DendroNode<>(new DendroNode<>(clusterReps.get(indX)), new DendroNode<>(clusterReps.get(indY))));
-            this.rootNode = mergeNodes.get(mergeNodes.size()-1);
-//            this.rootNode.contents = mergeNodes.get(mergeNodes.size()-1).getContents();
-//            System.out.println(mergeNodes);
-//            System.out.println(rootNode);
+            outputBorder();
+            System.out.printf("Current Strongest Weight: %.3f with clusters [%d: %s]-[%d: %s]\n", currentMin[i][0], indX, clusterReps.get(indX), indY, clusterReps.get(indY));
+           
+            // Construct dendrogram.
+            baseNodes.set(indX, new DendroNode<>(new DendroNode<>(baseNodes.get(indX)), new DendroNode<>(baseNodes.get(indY))));
+            baseNodes.remove(indY);
+            this.rootNode = baseNodes.get(indX);
             
             // Merge the two-closest clusters together and add their weights.
             String rep = clusters.union(clusterReps.get(indX), clusterReps.get(indY));
             clusters.setProximity(rep, currentMin[i][0]);
-            
             System.out.println(clusters);
+            
+            // Output the proximity table before merging.
             System.out.printf("Before Merge #%d:\n", i);
             System.out.println(stringifyList2D(proximityMatrix, clusterReps));
 
+            // Perform proximity recalculation and remove merged clusters 
+            // from the proximity matrix.
             completeLinkage(proximityMatrix, clusterReps, indX, indY);
 
+            // Output the proximity table after merging.
             System.out.printf("After Merge #%d:\n", i);
             System.out.println(stringifyList2D(proximityMatrix, clusterReps));
         }
-
+        
+        return clusters;
+    }
+    
+    /**
+     * Random method to output borders.
+     */
+    public static void outputBorder() {
+        for(int i = 0; i < 150; i++) {
+            System.out.print("-");
+        }
+        System.out.println("");
     }
 
+    /**
+     * Helper method to convert a table into a 2D-list. 2D-Lists are
+     * easier to remove whole rows/columns. Suitable for AHC operations.
+     * 
+     * @param table
+     * @return 2D list
+     */
     public static ArrayList<ArrayList<Double>> toList2D(double[][] table) {
         ArrayList<ArrayList<Double>> list2D = new ArrayList<>();
         for(int i = 0; i < table.length; i++) {
@@ -97,6 +137,14 @@ public class CommunityClusterFinder {
         return list2D;
     }
 
+    /**
+     * Helper method to find the strongest association weight between 
+     * all current clusters. Also returns where the association indices
+     * are so they can be used later to reconstruct sets.
+     * 
+     * @param table
+     * @return a double array containing the min distance, index 1, index 2.
+     */
     public static double[] findClosestStats(ArrayList<ArrayList<Double>> table) {
         double[] returnData = new double[3];
         returnData[0] = Double.MAX_VALUE;
@@ -114,6 +162,18 @@ public class CommunityClusterFinder {
         return returnData;
     }
 
+    /**
+     * Method to recalculate table based on the complete link clustering
+     * technique. The maximum of the distance between all the points 
+     * in the merged clusters are compared and updated in the proximity matrix.
+     * One of the merged cluster is then deleted from the matrix so that
+     * it can slowly be reduced to one big cluster.
+     * 
+     * @param table
+     * @param clusterReps
+     * @param indX
+     * @param indY 
+     */
     public static void completeLinkage(ArrayList<ArrayList<Double>> table, List<String> clusterReps, int indX, int indY) {
         for(int i = 0; i < table.size(); i++) {
             // Get the largest distance of these two points compared to other points in the graph.
@@ -142,9 +202,7 @@ public class CommunityClusterFinder {
      */
     public static String stringifyList2D(ArrayList<ArrayList<Double>> table, List<String> actors) {
         String output = "";
-        for(String actor : actors) {
-            output += "\t" + actor;
-        }
+        output = actors.stream().map(actor -> "\t" + actor).reduce(output, String::concat);
         output += "\n";
 
         for(int i = 0; i < table.size(); i++) {
@@ -160,19 +218,19 @@ public class CommunityClusterFinder {
         }
         return output;
     }
-
-    public static void main(String[] args) {
-        // Test data.
-        double[][] associations = {
-            {0D, 0.5D, 0.4D, 0D, 0D, 0D},
-            {0.5D, 0D, 0D, 0.4D, 0D, 0D},
-            {0.4D, 0D, 0D, 0.3D, 0.5D, 0D},
-            {0D, 0.4D, 0.3D, 0D, 0.8D, 0D},
-            {0D, 0D, 0.5D, 0.8D, 0D, 0.7D},
-            {0D, 0D, 0D, 0D, 0.7D, 0D}};
-        // Social actors involved in the table.
-        String[] actors = {"Anna", "Bill", "Carl", "Dave", "Emma", "Fred"};
-        CommunityClusterFinder clusterFinder = new CommunityClusterFinder(associations, actors);
-        System.out.println(clusterFinder);
-    }
+//
+//    public static void main(String[] args) {
+//        // Test data.
+//        double[][] associations = {
+//            {0D, 0.5D, 0.4D, 0D, 0D, 0D},
+//            {0.5D, 0D, 0D, 0.4D, 0D, 0D},
+//            {0.4D, 0D, 0D, 0.3D, 0.5D, 0D},
+//            {0D, 0.4D, 0.3D, 0D, 0.8D, 0D},
+//            {0D, 0D, 0.5D, 0.8D, 0D, 0.7D},
+//            {0D, 0D, 0D, 0D, 0.7D, 0D}};
+//        // Social actors involved in the table.
+//        String[] actors = {"Anna", "Bill", "Carl", "Dave", "Emma", "Fred"};
+//        CommunityClusterFinder clusterFinder = new CommunityClusterFinder(associations, actors);
+//        System.out.println(clusterFinder);
+//    }
 }

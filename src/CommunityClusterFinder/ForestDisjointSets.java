@@ -1,5 +1,12 @@
 package CommunityClusterFinder;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * A class that implements a disjoint set collection using a tree for each set,
  * where each node has a link to the parent node in the tree and the
@@ -14,13 +21,6 @@ package CommunityClusterFinder;
  * @author Amos Foong <18044418>: Made some minute modifications to suit an application.
  * @author Jose Santos <17993442>
  */
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 public class ForestDisjointSets<E> implements DisjointSetsADT<E> {
 
     private List<Node<E>> repNodes; // root for each tree in forest
@@ -193,24 +193,24 @@ public class ForestDisjointSets<E> implements DisjointSetsADT<E> {
         }
     }
 
-    public static void main(String[] args) {
-        DisjointSetsADT<Character> sets = new ForestDisjointSets<Character>();
-        System.out.println("Creating singleton sets for a,b,c,d,e,f,g");
-        Character a = sets.makeSet(new Character('a'));
-        Character b = sets.makeSet(new Character('b'));
-        Character c = sets.makeSet(new Character('c'));
-        Character d = sets.makeSet(new Character('d'));
-        Character e = sets.makeSet(new Character('e'));
-        Character f = sets.makeSet(new Character('f'));
-        Character g = sets.makeSet(new Character('g'));
-        System.out.println(sets);
-        System.out.println("Union {a} with {e}, {b} with {d}, {f} with {g}");
-        Character ae = sets.union(a, e);
-        Character bd = sets.union(b, d);
-        Character fg = sets.union(f, g);
-        System.out.println(sets);
-        System.out.println("Union {b,d} with {f,g}");
-        sets.union(bd, fg);
-        System.out.println(sets);
-    }
+//    public static void main(String[] args) {
+//        DisjointSetsADT<Character> sets = new ForestDisjointSets<Character>();
+//        System.out.println("Creating singleton sets for a,b,c,d,e,f,g");
+//        Character a = sets.makeSet(new Character('a'));
+//        Character b = sets.makeSet(new Character('b'));
+//        Character c = sets.makeSet(new Character('c'));
+//        Character d = sets.makeSet(new Character('d'));
+//        Character e = sets.makeSet(new Character('e'));
+//        Character f = sets.makeSet(new Character('f'));
+//        Character g = sets.makeSet(new Character('g'));
+//        System.out.println(sets);
+//        System.out.println("Union {a} with {e}, {b} with {d}, {f} with {g}");
+//        Character ae = sets.union(a, e);
+//        Character bd = sets.union(b, d);
+//        Character fg = sets.union(f, g);
+//        System.out.println(sets);
+//        System.out.println("Union {b,d} with {f,g}");
+//        sets.union(bd, fg);
+//        System.out.println(sets);
+//    }
 }

@@ -50,6 +50,8 @@ public class CommunityFloydWarshall {
 
         // Find all pairs shortest path between people.
         performFloydWarshall();
+        
+        System.out.println(this.toString());
     }
 
     public double[][] getShortestPathsTable() {
@@ -76,7 +78,7 @@ public class CommunityFloydWarshall {
      * @param associations
      * @return a weighted table
      */
-    private double[][] computeWeights(double[][] associations) {
+    public double[][] computeWeights(double[][] associations) {
         double[][] convertedTable = new double[associations.length][associations.length];
 
         for(int i = 0; i < associations.length; i++) {

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package CommunityClusterFinder;
 
 import java.util.ArrayList;
@@ -26,14 +21,17 @@ public class DendroNode<T> {
     protected T contents;
     protected List<DendroNode<T>> children;
 
-    public DendroNode(T contents)
-    {
+    public DendroNode(T contents) {
         this.contents = contents;
         this.children = Collections.emptyList();
     }
+    
+    public DendroNode(DendroNode<T> copy) {
+        this.contents = copy.contents;
+        this.children = copy.children;
+    }
 
-    public DendroNode(DendroNode<T> child0, DendroNode<T> child1)
-    {
+    public DendroNode(DendroNode<T> child0, DendroNode<T> child1) {
         this.contents = null;
 
         List<DendroNode<T>> list = new ArrayList<>();
@@ -42,16 +40,15 @@ public class DendroNode<T> {
         this.children = Collections.unmodifiableList(list);
     }
 
-    public T getContents()
-    {
+    public T getContents() {
         return contents;
     }
 
-    public List<DendroNode<T>> getChildren()
-    {
+    public List<DendroNode<T>> getChildren() {
         return Collections.unmodifiableList(children);
     }
     
+    @Override
     public String toString() {
         return this.getContents().toString();
     }
